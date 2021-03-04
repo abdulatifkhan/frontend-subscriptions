@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client"
 
 const CLASSIFIEDS = gql`
-  query {
-    classifieds {
+  query classifieds($cat: String!){
+    classifieds(cat: $cat) {
       id
       title
     }

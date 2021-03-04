@@ -44,11 +44,11 @@ function Classified () {
 
       	{ error && <ErrorMessage error={error} /> }
 			
-			{/* <input type="text" onChange={e => {
+			<input type="text" onChange={e => {
 
 				setCat(e.target.value)
 			
-			}} /> */}
+			}} />
 
 			{ data && <ul>
 
