@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { useQuery, useSubscription } from "@apollo/client";
 import { CLASSIFIEDS, SUBSCRIPTION } from "./Query.js";
 
@@ -6,26 +7,54 @@ import ErrorMessage from "../Error/Error";
 
 function Classified () {
 
-  const { loading, error, data } = useQuery(CLASSIFIEDS)
+  const [cat, setCat] = useState("")
 
-  const { data: sData, loading: sLoading } = useSubscription(SUBSCRIPTION)
+  const { loading, error, data } = useQuery(CLASSIFIEDS, {
+		variables: {
+			cat,
+		}
+  })
 
-  console.log(data);
+  useSubscription(SUBSCRIPTION, {
+
+		onSubscriptionData: ({ client: { cache }, subscriptionData: { data } }) => {
+
+			cache.modify({
+				fields: {
+					classifieds: () => {}
+				}
+			})
+		},
+	})
+
+  useEffect(() => {
+
+		if (data) {
+
+			console.log(data.classifieds)
+		}
+
+	}, [
+		data,
+	])
 
   return (
     <>
       { loading && <Loader /> }
-      { error && <ErrorMessage error={error} /> }
 
-      { data && <ul>
-        
-        {
-          data.classifieds.map(( c ) => <li key={c.id}>{c.title}</li>)
-        }
+      	{ error && <ErrorMessage error={error} /> }
+			
+			{/* <input type="text" onChange={e => {
 
-        {
-          !sLoading && sData && <>Ok</>
-        }
+				setCat(e.target.value)
+			
+			}} /> */}
+
+			{ data && <ul>
+
+				{
+					data.classifieds.map(c => <li key={c.id}>{c.title}</li>)
+				}
 
       </ul>}
     </>
