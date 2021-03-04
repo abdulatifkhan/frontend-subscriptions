@@ -9,6 +9,15 @@ const CLASSIFIEDS = gql`
   }
 `
 
+const SUBSCRIPTION = gql`
+  subscription {
+    createdClassified {
+      title
+    }
+  }
+`
+
 export {
   CLASSIFIEDS,
+  SUBSCRIPTION,
 }
